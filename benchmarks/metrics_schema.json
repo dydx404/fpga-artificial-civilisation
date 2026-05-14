@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CivilisationEngineBenchmark",
+  "type": "object",
+  "required": [
+    "backend",
+    "width",
+    "height",
+    "steps",
+    "elapsed_seconds",
+    "cells_updated_per_second",
+    "frames_per_second"
+  ],
+  "properties": {
+    "backend": {"type": "string"},
+    "commit": {"type": "string"},
+    "python": {"type": "string"},
+    "platform": {"type": "string"},
+    "width": {"type": "integer", "minimum": 1},
+    "height": {"type": "integer", "minimum": 1},
+    "steps": {"type": "integer", "minimum": 1},
+    "mutation_probability": {"type": "number", "minimum": 0, "maximum": 1},
+    "elapsed_seconds": {"type": "number", "minimum": 0},
+    "kernel_seconds": {"type": "number", "minimum": 0},
+    "transfer_seconds": {"type": "number", "minimum": 0},
+    "cells_updated_per_second": {"type": ["number", "null"]},
+    "frames_per_second": {"type": ["number", "null"]},
+    "final_metrics": {"type": "object"}
+  },
+  "additionalProperties": true
+}
+

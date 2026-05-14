@@ -1,0 +1,6 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Project backlog
+    url: https://github.com/
+    about: Convert items from project_management/issue_backlog.md into GitHub issues after the repository is pushed.
+

@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+*.egg-info/
+
+# Outputs and experiment data
+outputs/
+runs/
+results/
+*.npy
+*.npz
+*.csv
+*.jsonl
+!benchmarks/metrics_schema.json
+
+# FPGA and EDA generated files
+*.bit
+*.hwh
+*.xsa
+*.jou
+*.log
+*.str
+*.wdb
+*.vcd
+*.fst
+*.svf
+*.rpt
+*.dcp
+*.runs/
+*.cache/
+*.hw/
+*.ip_user_files/
+vivado*.backup*/
+rtl/sim/verilator/obj_dir/
+
+# Node and web tooling
+node_modules/
+dist/
+.vite/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
