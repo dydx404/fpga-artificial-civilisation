@@ -1,48 +1,56 @@
 # Demo Storyboard
 
-The final demo should tell a clear story: simple local incentives can produce dramatic social-scale behaviour, and the FPGA makes it possible to explore larger worlds interactively.
+The final demo should tell a clear story: simple local incentives can produce dramatic long-horizon behaviour, and FPGA acceleration lets the team explore many more strategic interactions than a simple CPU loop.
 
-## Scene 1: Random Society
+## Scene 1: Open the Strategy Colosseum
 
-Start with a random grid of cooperators and defectors. Show a heatmap where colours represent strategies. Explain that every cell is an agent making repeated local decisions.
+Start with a tournament dashboard. Show a list of strategies entering the arena: Always Cooperate, Always Defect, Tit-for-Tat, Suspicious Tit-for-Tat, Generous Tit-for-Tat, Random(p), Pavlov, and Grudger.
 
-## Scene 2: Defectors Dominate
+## Scene 2: Long Repeated Games
 
-Run fixed Prisoner's Dilemma with no mutation. Defectors exploit nearby cooperators and spread. The cooperation ratio drops. This establishes the baseline social dilemma.
+Run repeated Prisoner's Dilemma matches. Show that one-round incentives do not tell the whole story: long memory, retaliation, forgiveness, and noise change which strategies survive.
 
-## Scene 3: Local Copying and Mutation
+## Scene 3: Leaderboard and Payoff Matrix
 
-Enable mutation and best-neighbour copying. The society becomes less uniform. Small pockets of alternative strategies appear. Some die out; some seed larger structures.
+Display a leaderboard and strategy-vs-strategy payoff matrix. Highlight exploiters, robust cooperators, and strategies that perform well only against weak opponents.
 
-## Scene 4: Cooperation Clusters
+## Scene 4: FPGA Acceleration
 
-Show that cooperators can survive in clusters because they reward each other locally. Highlight the difference between individual incentive and spatial group structure.
+Run the same tournament on CPU and FPGA. Show rounds per second, matches per second, and whether transfer overhead is included. If multiple match cores exist, show parallel scaling.
 
-## Scene 5: Resource Scarcity
+## Scene 5: Evolutionary Tournament
 
-Enable a resource or energy pressure mode. Agents in crowded or low-resource regions lose energy. The map shows collapse in stressed areas and recovery where cooperative clusters stabilise.
+Enable selection and mutation. Weak strategy variants disappear, strong variants reproduce, and probabilistic parameters drift. Show population distribution changing over generations.
 
-## Scene 6: CPU vs FPGA
+## Scene 6: Spatial Civilisation Extension
 
-Run the same rule on CPU and FPGA. Show cells updated per second and frame rate. Be explicit about whether the benchmark includes DMA transfer.
+Move winning or interesting strategies into a 2D civilisation map. Agents interact with neighbours. Cooperation clusters, betrayal waves, collapse, and recovery become visible.
 
-## Scene 7: Live Statistics
+## Scene 7: Multi-Board Extension
 
-Display:
+If multiple PYNQ boards are available, show each board as an arena shard, civilisation region, or strategy league participant. The host aggregates a global leaderboard or distributed map.
+
+## Live Statistics
+
+Display a compact dashboard:
 
 - Cooperation ratio.
 - Mean payoff.
 - Strategy distribution.
 - Entropy.
-- Generation number.
+- Leaderboard rank.
+- Strategy-vs-strategy payoff.
+- Robustness or exploitability score.
+- Tournament generation number.
 
-The best demo ends with a live parameter change, such as increasing mutation or temptation, and watching the society respond.
+The best demo ends with a live parameter change, such as increasing noise, mutation, temptation payoff, or round count, and watching the strategic ecosystem respond.
 
 ## Backup Demo
 
 If the full FPGA path is not ready, show:
 
-- Python simulation with strong visualisation.
-- FPGA cellular automata or fixed Prisoner's Dilemma proof.
-- A clear roadmap connecting the two.
+- Python tournament simulator with strong leaderboard and payoff-matrix visualisation.
+- Single FPGA repeated Prisoner's Dilemma match core if available.
+- Spatial civilisation as a Python or visual extension.
+- A clear roadmap from arena MVP to distributed civilisation.
 

@@ -1,47 +1,65 @@
 # MVP Plan
 
-The MVP is a fixed-grid evolutionary Prisoner's Dilemma simulator with a Python reference model and a first FPGA datapath target.
+The updated MVP is arena-first: a repeated-game Strategy Colosseum with a Python reference tournament and a first FPGA repeated-match datapath target.
 
-## Simulation Rules
+This is a clearer first milestone than the full spatial civilisation because it is easier to verify, benchmark, and explain. The existing spatial Python simulator remains valuable as the extension path once the strategy semantics and match engine are stable.
+
+## Arena MVP Rules
+
+- Repeated Prisoner's Dilemma as the first game.
+- Fixed round count per match.
+- Initial strategy catalogue: Always Cooperate, Always Defect, Tit-for-Tat, Random(p), Pavlov, and Grudger.
+- Configurable payoff matrix with `R`, `S`, `T`, and `P`.
+- Optional noise probability for action flips.
+- Score accumulation across rounds.
+- Strategy-vs-strategy payoff matrix.
+- Leaderboard ranked by total or mean score.
+
+## Arena MVP Deliverables
+
+- Python tournament reference model.
+- Strategy catalogue with deterministic fixed-seed behaviour.
+- Unit tests for strategy decisions, payoff lookup, and score accumulation.
+- Leaderboard and payoff matrix output.
+- CPU baseline measured in rounds per second and matches per second.
+- RTL plan or prototype for a single repeated Prisoner's Dilemma match core.
+- Architecture, fallback, and demo documentation aligned around arena-first delivery.
+
+## Spatial Extension Rules
+
+The spatial civilisation path remains:
 
 - 2D row-major grid.
 - Moore neighbourhood with 8 neighbours.
 - Agent fields: strategy, payoff, energy, age.
-- Strategies: cooperate, defect, tit-for-tat placeholder, random placeholder.
-- Prisoner's Dilemma payoff matrix with configurable `R`, `S`, `T`, and `P`.
-- Each generation computes payoff against neighbours.
-- Each agent copies the strategy of the highest-payoff neighbour if that payoff is higher than its own.
-- Mutation randomly changes strategy with a configured probability.
-- Age increments once per generation.
-- Energy changes according to payoff gain minus living cost.
-
-## MVP Deliverables
-
-- Numpy simulator.
-- Unit tests for payoff, update rules, and metrics.
-- Matplotlib visualiser.
-- CPU baseline benchmark.
-- RTL skeleton with payoff unit, LFSR, update core, buffers, and stats reducer.
-- PYNQ interface placeholders.
-- Architecture, fallback, and demo documentation.
+- Strategy copying from the highest-payoff neighbour.
+- Mutation probability.
+- Double-buffered world update.
+- Cooperation clusters, betrayal waves, collapse, and recovery.
 
 ## Definition of Done
 
-The MVP is done when:
+The arena MVP is done when:
 
-- `pytest` passes for the Python model.
-- The Prisoner's Dilemma example produces visible strategy evolution.
-- The CPU benchmark reports cells per second and frames per second.
-- RTL modules are sufficiently specified for implementation tasks.
-- The team can explain how a Python cell update maps to the FPGA pipeline.
+- Python tournament tests pass.
+- A repeated Prisoner's Dilemma tournament produces a leaderboard and payoff matrix.
+- CPU benchmark reports rounds per second and matches per second.
+- The team can explain how a repeated match maps to an FPGA match core.
+- Spatial civilisation remains available as the demo extension rather than blocking the MVP.
 
 ## First Experiments
 
-Suggested experiments:
+Suggested arena experiments:
 
-- Random 50/50 cooperate/defect world.
-- Mostly cooperative world with a small defector seed.
-- Mutation probability sweep from 0 to 0.05.
-- Payoff matrix sweep varying temptation `T`.
-- World size sweep for CPU baseline timing.
+- All fixed strategies against each other for 100, 1000, and 10000 rounds.
+- Noise sweep from 0 to 0.05.
+- Temptation payoff sweep varying `T`.
+- Random(p) sweep across several cooperation probabilities.
+- Tournament population seeded with repeated variants of the same strategy family.
+
+Suggested spatial follow-on experiments:
+
+- Seed the grid with the arena winner and strongest exploiter.
+- Compare spatial cooperation clusters against arena leaderboard rank.
+- Add resource pressure after the basic spatial handoff works.
 
