@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "CivilisationEngineBenchmark",
+  "title": "SpatialGameDynamicsBenchmark",
   "type": "object",
   "required": [
     "backend",
@@ -29,4 +29,3 @@
   },
   "additionalProperties": true
 }
-

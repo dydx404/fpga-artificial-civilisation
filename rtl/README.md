@@ -4,7 +4,7 @@ This directory contains the SystemVerilog starting point for the FPGA accelerati
 
 ## Agent Word Format
 
-The MVP packed agent word is 8 bits:
+The current scaffold uses an early 8-bit packed word:
 
 ```text
 bit  [1:0] strategy
@@ -13,7 +13,7 @@ bit  [5:4] energy_class
 bit  [7:6] age_class
 ```
 
-Strategy encoding:
+Early strategy encoding:
 
 ```text
 0 = cooperate
@@ -21,6 +21,8 @@ Strategy encoding:
 2 = tit_for_tat placeholder
 3 = random placeholder
 ```
+
+The scoped proposal targets five MVP strategies, so a later hardware format will likely use a 3-bit `strategy_id` plus a `last_action` bit. Keep the early 2-bit format only for first cooperate/defect bring-up.
 
 ## Module Map
 
@@ -31,7 +33,7 @@ Strategy encoding:
 - `neighbour_fetch.sv`: Placeholder for line-buffer or BRAM neighbour fetch.
 - `world_buffer.sv`: Double-buffered world memory scaffold.
 - `stats_reducer.sv`: Streaming statistics counter.
-- `top_civ_engine.sv`: Top-level compute-engine outline.
+- `top_spatial_game_engine.sv`: Top-level compute-engine outline.
 
 ## First Implementation Target
 
@@ -44,4 +46,3 @@ Strategy encoding:
 ## Honesty Note
 
 Neighbour fetch, DMA wrappers, AXI-lite registers, and full frame traversal are not complete in this initial scaffold. They are the main hardware work packages for the team.
-

@@ -2,33 +2,28 @@
 
 ## Slide 1: Project Pitch
 
-Artificial societies on FPGA: local rules, global behaviour, measurable acceleration.
+FPGA-accelerated spatial game dynamics: simple local strategic interactions, visible emergent patterns, measurable hardware speedup.
 
-## Slide 2: Scientific Background
+## Slide 2: Model
 
-Evolutionary game theory, Prisoner's Dilemma, spatial cooperation, cellular automata.
+2D grid, repeated Prisoner's Dilemma, finite-state strategies, local payoff, imitate strongest neighbour.
 
-## Slide 3: System Architecture
+## Slide 3: Why FPGA
 
-Host, PYNQ processing system, programmable logic, visualisation pipeline.
+Local neighbourhood computation, synchronous updates, double buffering, pipelined payoff/update units.
 
-## Slide 4: Python Reference Model
+## Slide 4: System Architecture
 
-Show update rule, metrics, and early heatmap results.
+Host, PYNQ processing system, FPGA update engine, Python reference model, visualisation.
 
-## Slide 5: RTL Design
+## Slide 5: Current Progress
 
-Show planned pipeline and module split.
+Python model, visualisation, tests, RTL skeletons, benchmark setup.
 
-## Slide 6: Integration Plan
+## Slide 6: Risks and Fallbacks
 
-Frame format, DMA concept, correctness comparison.
+Show Tier 0 to Tier 5 fallback ladder.
 
-## Slide 7: Risks and Fallbacks
+## Slide 7: Next Steps
 
-Show fallback ladder and freeze dates.
-
-## Slide 8: Next Steps
-
-Hardware bring-up, benchmark matrix, demo polishing.
-
+Hardware update core, correctness comparison, DMA/PYNQ integration, benchmark matrix.

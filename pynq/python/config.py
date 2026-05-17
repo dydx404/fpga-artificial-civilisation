@@ -7,9 +7,9 @@ from dataclasses import dataclass
 
 @dataclass
 class OverlayConfig:
-    """Runtime configuration for the FPGA civilisation overlay."""
+    """Runtime configuration for the FPGA spatial game dynamics overlay."""
 
-    bitstream_path: str = "civ_engine.bit"
+    bitstream_path: str = "spatial_game_engine.bit"
     width: int = 128
     height: int = 128
     mutation_probability: float = 0.001
@@ -24,4 +24,3 @@ class OverlayConfig:
 
         probability = min(max(self.mutation_probability, 0.0), 1.0)
         return int(round(probability * 65535))
-

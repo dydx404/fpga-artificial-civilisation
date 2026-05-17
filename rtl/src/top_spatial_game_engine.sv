@@ -5,7 +5,7 @@
 // This is not yet a complete PYNQ IP block. It exposes a simple valid-driven
 // window interface so the core datapath can be simulated before AXI wrappers,
 // DMA, and real neighbour fetch are finished.
-module top_civ_engine #(
+module top_spatial_game_engine #(
     parameter int AGENT_WIDTH = 8,
     parameter int N_NEIGHBOURS = 8,
     parameter int PAYOFF_WIDTH = 16
@@ -85,4 +85,3 @@ module top_civ_engine #(
     );
 
 endmodule
-

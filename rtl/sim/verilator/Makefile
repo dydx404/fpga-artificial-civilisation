@@ -8,7 +8,7 @@ SV_SRCS := \
 	$(RTL_DIR)/strategy_update_unit.sv \
 	$(RTL_DIR)/agent_update_core.sv \
 	$(RTL_DIR)/stats_reducer.sv \
-	$(RTL_DIR)/top_civ_engine.sv \
+	$(RTL_DIR)/top_spatial_game_engine.sv \
 	$(TB_DIR)/$(TB).sv
 
 .PHONY: all run clean
@@ -21,4 +21,3 @@ run:
 
 clean:
 	rm -rf obj_dir
-

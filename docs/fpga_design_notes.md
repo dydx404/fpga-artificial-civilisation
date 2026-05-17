@@ -4,7 +4,7 @@ The RTL in this repository is a scaffold. It is intended to guide implementation
 
 ## Compact Agent Word
 
-The current scaffold assumes:
+The current RTL scaffold uses a very small early format:
 
 ```text
 bit  [1:0] strategy
@@ -13,7 +13,16 @@ bit  [5:4] energy_class
 bit  [7:6] age_class
 ```
 
-The first working hardware path may ignore energy and age, preserving those bits during update.
+That is enough for the earliest cooperate/defect experiments, but the scoped MVP strategy list needs at least 3 strategy bits. A later packed word should move toward:
+
+```text
+bit  [2:0] strategy_id
+bit  [3]   last_action
+bit  [5:4] flags / reserved
+bit  [7:6] age_class / reserved
+```
+
+The first working hardware path may ignore age/reserved fields, preserving those bits during update.
 
 ## Datapath
 
@@ -61,4 +70,3 @@ Do not chase one-cell-per-cycle before the algorithm is verified. A multi-cycle 
 - Log exact seeds for reproducibility.
 - Compare small worlds before large benchmarks.
 - Separate kernel runtime from DMA transfer time in benchmarks.
-

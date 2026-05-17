@@ -1,65 +1,54 @@
 # MVP Plan
 
-The updated MVP is arena-first: a repeated-game Strategy Colosseum with a Python reference tournament and a first FPGA repeated-match datapath target.
+Use [mvp_scope.md](mvp_scope.md) as the authoritative scope document. This page gives the implementation sequence.
 
-This is a clearer first milestone than the full spatial civilisation because it is easier to verify, benchmark, and explain. The existing spatial Python simulator remains valuable as the extension path once the strategy semantics and match engine are stable.
+## Phase 1: Reference Model
 
-## Arena MVP Rules
+- Fix strategy IDs and payoff matrix.
+- Implement or confirm Python grid update semantics.
+- Add deterministic tiny-grid tests.
+- Produce initial visual frames and metrics.
 
-- Repeated Prisoner's Dilemma as the first game.
-- Fixed round count per match.
-- Initial strategy catalogue: Always Cooperate, Always Defect, Tit-for-Tat, Random(p), Pavlov, and Grudger.
-- Configurable payoff matrix with `R`, `S`, `T`, and `P`.
-- Optional noise probability for action flips.
-- Score accumulation across rounds.
-- Strategy-vs-strategy payoff matrix.
-- Leaderboard ranked by total or mean score.
+Exit criteria:
 
-## Arena MVP Deliverables
+- Python tests pass.
+- A fixed-seed example produces repeatable output.
+- The update rule is documented clearly enough for RTL work.
 
-- Python tournament reference model.
-- Strategy catalogue with deterministic fixed-seed behaviour.
-- Unit tests for strategy decisions, payoff lookup, and score accumulation.
-- Leaderboard and payoff matrix output.
-- CPU baseline measured in rounds per second and matches per second.
-- RTL plan or prototype for a single repeated Prisoner's Dilemma match core.
-- Architecture, fallback, and demo documentation aligned around arena-first delivery.
+## Phase 2: Hardware-Compatible Data Path
 
-## Spatial Extension Rules
+- Define packed agent word.
+- Define current/next buffer layout.
+- Define mutation threshold representation.
+- Implement or refine payoff and strategy units in RTL.
+- Build simple testbenches for payoff and LFSR.
 
-The spatial civilisation path remains:
+Exit criteria:
 
-- 2D row-major grid.
-- Moore neighbourhood with 8 neighbours.
-- Agent fields: strategy, payoff, energy, age.
-- Strategy copying from the highest-payoff neighbour.
-- Mutation probability.
-- Double-buffered world update.
-- Cooperation clusters, betrayal waves, collapse, and recovery.
+- Hardware modules have stable interfaces.
+- Small examples can be manually compared with Python.
 
-## Definition of Done
+## Phase 3: FPGA / PYNQ Integration
 
-The arena MVP is done when:
+- Move one frame into the hardware path.
+- Run one generation or one update core invocation.
+- Return next state and statistics.
+- Compare with Python for mutation-disabled cases.
 
-- Python tournament tests pass.
-- A repeated Prisoner's Dilemma tournament produces a leaderboard and payoff matrix.
-- CPU benchmark reports rounds per second and matches per second.
-- The team can explain how a repeated match maps to an FPGA match core.
-- Spatial civilisation remains available as the demo extension rather than blocking the MVP.
+Exit criteria:
 
-## First Experiments
+- Hardware performs a real update computation.
+- Transfer and compute timing can be measured separately.
 
-Suggested arena experiments:
+## Phase 4: Demo and Benchmark
 
-- All fixed strategies against each other for 100, 1000, and 10000 rounds.
-- Noise sweep from 0 to 0.05.
-- Temptation payoff sweep varying `T`.
-- Random(p) sweep across several cooperation probabilities.
-- Tournament population seeded with repeated variants of the same strategy family.
+- Run a larger grid.
+- Visualise strategy and payoff evolution.
+- Measure CPU reference and FPGA implementation.
+- Report resource utilisation and fallback tier.
 
-Suggested spatial follow-on experiments:
+Exit criteria:
 
-- Seed the grid with the arena winner and strongest exploiter.
-- Compare spatial cooperation clusters against arena leaderboard rank.
-- Add resource pressure after the basic spatial handoff works.
-
+- Demo is reproducible.
+- Benchmark table is honest about transfer overhead.
+- The report explains limitations and next steps.

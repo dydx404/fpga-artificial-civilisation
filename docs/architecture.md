@@ -1,200 +1,134 @@
 # Architecture
 
-The system is split into host, processing system, and programmable logic. This split keeps the FPGA focused on repeated game computation while software handles flexibility, tournament orchestration, spatial modelling, visualisation, and analysis.
+The architecture is built around a simple rule: each agent reads local state, plays a repeated game with neighbours, accumulates payoff, and writes a next state. The FPGA accelerates this regular state-transition loop.
 
-The project now has two connected operating modes:
+## System View
 
-- Strategy Arena / Strategy Colosseum: repeated-game tournaments between strategies.
-- Artificial Civilisation / Spatial Evolution: strategies inhabit agents in a grid world and interact locally.
+```mermaid
+flowchart TB
+    Config[Experiment config] --> Host[Host Python tools]
+    Host --> PYNQ[PYNQ processing system]
+    PYNQ --> DMA[Frame/config transfer]
+    DMA --> FPGA[FPGA spatial update engine]
+    FPGA --> DMA
+    DMA --> PYNQ
+    PYNQ --> Host
+    Host --> Viz[Visualisation and logs]
+    PythonRef[Python reference simulator] --> Host
+```
 
-Strategy Arena is the cleaner MVP because match throughput, ranking, and correctness are easy to benchmark. Spatial Evolution is the extension that makes the demo feel alive.
+## Main Modules
 
-## Host / PS / PL Split
+| Module | Role |
+| --- | --- |
+| Python reference simulator | Defines correct model semantics and generates test cases |
+| FPGA world update engine | Runs one generation or tile update using hardware datapath |
+| Strategy decision unit | Converts strategy state/history into cooperate/defect action |
+| Payoff lookup unit | Applies the selected game payoff matrix |
+| Neighbourhood fetch unit | Supplies Moore/Von Neumann neighbour state for a cell |
+| Double-buffered world memory | Separates current and next generation state |
+| RNG/LFSR mutation unit | Provides deterministic hardware randomness for mutation/noise |
+| Statistics reducer | Counts strategies, cooperation events, and payoff totals |
+| Host/PYNQ control layer | Loads overlay, configures registers, manages buffers |
+| Visualisation frontend | Displays grid, heatmaps, plots, and benchmark summaries |
 
-Host machine:
+## Data Model
 
-- Tournament, game, and civilisation configuration.
-- Web or Python visualisation.
-- Long-running data logging.
-- CPU reference simulations and benchmark comparison.
-- Optional network client for remote control.
-- Multi-board orchestration and result aggregation.
+Agent state fields:
 
-Zynq processing system:
+| Field | Purpose | MVP Representation |
+| --- | --- | --- |
+| `strategy_id` | Which strategy rule the agent follows | 3 bits target; 2 bits for first bring-up |
+| `last_action` | Previous cooperate/defect action | 1 bit |
+| `payoff` | Accumulated local payoff for current generation | signed fixed-width integer |
+| `age` or generation counter | Optional debugging/extension field | optional small integer |
+| random seed/state | Optional per-agent randomness | optional, can be global LFSR first |
 
-- PYNQ overlay loading.
-- DMA buffer allocation.
-- Register configuration for payoff matrix, round count, mutation/noise probability, world size, and run control.
-- TCP/WebSocket bridge to the host frontend.
-- Sanity checks and fallback software execution.
+Game parameters:
 
-Programmable logic:
+| Parameter | Example |
+| --- | --- |
+| payoff matrix | `R=3, S=0, T=5, P=1` |
+| mutation probability | `0`, `0.001`, `0.01` |
+| neighbourhood type | Moore or Von Neumann |
+| grid size | `64x64`, `128x128`, `256x256` |
+| number of steps | `100`, `1000`, `10000` |
+| initial strategy distribution | 50/50 cooperate/defect or fixed seed mix |
 
-- Repeated match pipeline.
-- Strategy decision and memory/history lookup.
-- Payoff lookup and score accumulation.
-- Optional spatial neighbour fetch.
-- Strategy update, mutation, and randomness.
-- Statistics reduction.
-- Tournament scheduling or frame traversal.
+## Spatial Update Pipeline
 
-## Strategy Arena Data Flow
+```mermaid
+flowchart LR
+    A[Read centre cell] --> B[Fetch neighbours]
+    B --> C[Strategy decisions]
+    C --> D[Payoff lookup]
+    D --> E[Payoff accumulation]
+    E --> F[Best-neighbour selection]
+    F --> G[Mutation/noise]
+    G --> H[Write next-state buffer]
+    H --> I[Statistics reduction]
+```
 
-The intended Strategy Arena data flow is:
-
-1. Host defines games, strategy list, round counts, noise, mutation, and tournament schedule.
-2. Processing system packs configuration and strategy parameters for the FPGA.
-3. FPGA match cores run repeated games and accumulate scores.
-4. Statistics reducers produce cooperation counts, payoff totals, and matchup summaries.
-5. Processing system returns compact results to the host.
-6. Host aggregates leaderboards, payoff matrices, robustness scores, and evolution updates.
-7. Dashboard renders tournament progress and strategy-vs-strategy outcomes.
-
-## Spatial Civilisation Data Flow
-
-The intended spatial data flow is:
-
-1. Host sends experiment configuration to the PYNQ control layer.
-2. Processing system packs the world into compact agent words.
-3. DMA transfers a frame or tile into programmable logic.
-4. The FPGA streams cells through the update pipeline.
-5. Updated cells are written to the next buffer.
-6. Statistics are reduced while the frame is processed.
-7. The processing system reads summary metrics and selected frame data.
-8. The host frontend renders heatmaps and charts.
-
-## Strategy Arena Layer
-
-The arena layer defines:
-
-- Game type: Prisoner's Dilemma, Snowdrift, Stag Hunt, Public Goods, or custom matrix.
-- Strategy catalogue: always cooperate, always defect, tit-for-tat variants, random(p), Pavlov, Grudger, adaptive, Q-learning, or neural stretch goals.
-- Match length and tournament schedule.
-- Noise, mutation, and population settings.
-- Ranking, exploitability, and robustness metrics.
-
-This layer should remain software-configurable so the FPGA can be a fast engine rather than a rigid experiment.
-
-## FPGA Match Engine
-
-The match engine is the most direct FPGA target:
-
-- Many parallel match cores.
-- Each core simulates a long repeated game between two strategies.
-- Cores keep compact memory/history state.
-- Payoff lookup is table-driven.
-- Scores and cooperation counts accumulate locally.
-- Result summaries stream back to the processing system.
-
-The first hardware version can be a single repeated Prisoner's Dilemma core. The scalable version replicates cores and shards tournaments across them.
-
-## Evolution Layer
-
-The evolution layer can run in host software or the processing system:
-
-- Weak strategies are eliminated.
-- Strong strategies reproduce.
-- Probabilistic parameters mutate.
-- New strategy variants enter the population.
-- Results feed the next tournament generation.
-
-Keeping evolution in software initially reduces hardware risk while still enabling a strong scientific story.
+The first implementation can process one cell over several cycles. A later version can pipeline the stages or replicate update engines.
 
 ## Double Buffering
 
-The spatial simulator uses current and next world buffers:
+The simulator must avoid in-place updates:
 
-- Read all agents from `world_current`.
-- Write all updates to `world_next`.
-- Never update a cell in place during the same generation.
-- Swap buffers at the frame boundary.
+- `world_current` is read for all cells in generation `t`.
+- `world_next` receives all cells for generation `t + 1`.
+- Buffers swap only after the full generation completes.
 
-This is important for correctness. Without double buffering, early cells in a frame could influence later cells in the same frame, creating scan-order artefacts.
+This prevents scan-order artefacts and makes Python/FPGA comparison easier.
 
-Arena mode uses a different buffering model. It needs match-state buffers, score buffers, and result buffers rather than current/next world frames.
+## Host / PS / PL Split
 
-## DMA Idea
+| Layer | Responsibilities |
+| --- | --- |
+| Host laptop | Experiment config, Python reference runs, logging, plots, dashboard |
+| PYNQ PS | Overlay loading, DMA/control setup, frame packing, board communication |
+| FPGA PL | Neighbour fetch, payoff/update pipeline, mutation RNG, statistics |
 
-The PYNQ path should eventually use contiguous buffers and DMA:
+## Interface Sketch
 
-- `current_frame`: packed agent words sent to PL.
-- `next_frame`: packed agent words received from PL.
-- `metrics_frame`: optional statistics payload.
-- `match_config`: packed strategy/game configuration for arena mode.
-- `match_results`: compact score and statistics records returned by arena mode.
+Minimal transfer payloads:
 
-For the MVP, a frame can be transferred as a flat row-major byte array. Later versions may use tiles so that large worlds fit within BRAM or stream through line buffers.
+```text
+config:
+  width, height
+  neighbourhood_type
+  payoff_R, payoff_S, payoff_T, payoff_P
+  mutation_threshold
+  step_count
 
-## Frontend Visualisation Pipeline
+input frame:
+  packed_agent_words[height * width]
 
-The visualisation layer should support:
+output frame:
+  packed_agent_words[height * width]
 
-- Leaderboard.
-- Strategy-vs-strategy payoff matrix.
-- Payoff heatmap.
-- Exploitability / robustness score.
-- Population distribution.
-- Live tournament replay.
-- Strategy heatmap.
-- Cooperation ratio chart.
-- Mean payoff chart.
-- Entropy or diversity chart.
-- Optional energy/resource field overlay.
+metrics:
+  strategy_counts[]
+  cooperation_count
+  payoff_sum
+  generation
+```
 
-Initial implementation can use matplotlib. A web frontend can subscribe to JSON metadata plus binary or base64 frame payloads later.
+## Correctness Strategy
 
-## Match Pipeline
+1. Disable mutation/noise.
+2. Use fixed tiny grids such as `4x4` and `8x8`.
+3. Run one generation in Python.
+4. Run the same generation through the FPGA path.
+5. Compare exact next-state frames and statistics.
+6. Only then add mutation/noise and larger benchmark grids.
 
-The planned Strategy Arena pipeline stages are:
+## Extension Architecture
 
-1. Match schedule dispatch.
-2. Strategy state and history lookup.
-3. Strategy action decision.
-4. Noise/random perturbation.
-5. Payoff lookup.
-6. Score accumulation.
-7. Memory/history update.
-8. Result/statistics reduction.
+Extensions should not disturb the MVP datapath unless the base system is stable:
 
-## Spatial Agent Update Pipeline
-
-The planned pipeline stages are:
-
-1. Coordinate/frame traversal.
-2. Neighbour fetch from line buffers or BRAM.
-3. Strategy action decode.
-4. Payoff accumulation across neighbours.
-5. Fitness comparison against neighbours.
-6. Mutation or random perturbation.
-7. Agent word packing.
-8. Next-buffer writeback.
-
-The first RTL version can compute one cell per several cycles. A later version can pipeline toward one cell per cycle.
-
-## Statistics Pipeline
-
-Statistics should be reduced in hardware where cheap:
-
-- Count strategies.
-- Sum payoff.
-- Count cooperative strategies.
-- Count wins/losses/draws in arena mode.
-- Accumulate strategy-vs-strategy payoff totals.
-- Track noise/mutation event counts.
-- Optionally compute min/max energy.
-
-Expensive derived values such as entropy can be computed in software from counts.
-
-## Tile and Boundary Strategy
-
-The spatial MVP assumes wrap-around edges because it simplifies Python and RTL comparison. If using tiles, each tile needs a halo region containing neighbouring cells. Halo exchange is a natural extension for multi-board or multi-region simulation.
-
-## Multi-Board Extension
-
-With multiple PYNQ-Z1 boards, the host can distribute work across boards:
-
-- Parallel tournament sharding: each board runs different strategy pairs or noisy variants.
-- Spatial civilisation partitioning: each board owns a world region and exchanges border agents over Ethernet.
-- Strategy league: each board hosts a strategy family or civilisation and periodically competes with others.
-
-The multi-board path should be summary-first. Boards should stream compact scores, population counts, and border slices before attempting full-frame streaming.
+- More strategy IDs.
+- Graph topologies with adjacency lists.
+- Resource/energy field as a second grid.
+- Asynchronous updates in software first.
+- Multi-board partitioning with border exchange.

@@ -2,20 +2,30 @@
 
 | Risk | Probability | Impact | Mitigation |
 | --- | --- | --- | --- |
-| FPGA neighbour fetch is harder than expected | High | High | Start with small BRAM design or cellular automata fallback |
-| DMA integration takes too long | Medium | High | Keep a simulated PYNQ interface and CPU benchmark ready |
-| Python model becomes too complex for RTL | Medium | High | Freeze an MVP rule and keep extensions optional |
-| Visualisation consumes too much time | Medium | Medium | Start with matplotlib and only build web/Unity after data format stabilises |
-| Benchmarks overclaim speedup | Medium | High | Separate kernel, transfer, and full-loop timing |
-| Team members work in isolation | Medium | High | Weekly integration checklist and shared issue backlog |
-| Randomness causes Python/RTL mismatch | Medium | Medium | Disable mutation for initial correctness tests |
-| Resource/trust features blow up scope | High | Medium | Keep civilisation features as Tier 4 or Tier 5 extensions |
-| Bitstream/toolchain problems | Medium | High | Preserve Python-only and Verilator-only demos |
+| Neighbour fetch is harder than expected | High | High | Start with small BRAM/tile design and tiny-grid tests |
+| DMA/PYNQ integration takes too long | Medium | High | Keep a Python-only and RTL-simulation fallback |
+| Python and RTL semantics diverge | Medium | High | Disable mutation first; compare one generation on small grids |
+| Scope expands into unrealistic agent behaviour | High | Medium | Freeze MVP strategies and defer extensions |
+| Visualisation consumes too much time | Medium | Medium | Use matplotlib first; web dashboard only after data path works |
+| Benchmarks overclaim speedup | Medium | High | Report transfer time, compute time, and full-loop time separately |
+| Randomness makes testing difficult | Medium | Medium | Use fixed seeds and deterministic mutation-disabled tests |
+| Toolchain/bitstream problems | Medium | High | Preserve Python demo and module-level RTL tests |
+| Team works in disconnected streams | Medium | High | Weekly integration checklist and shared issue backlog |
+
+## Fallback Tiers
+
+| Tier | Deliverable |
+| --- | --- |
+| 0 | Python simulation and visualisation only |
+| 1 | Single FPGA match/update core |
+| 2 | Full grid update through FPGA |
+| 3 | Multiple strategies and mutation |
+| 4 | Advanced visualisation and experiments |
+| 5 | Graph topologies or multi-board extension |
 
 ## Risk Handling Principles
 
 - Freeze scope early when integration risk rises.
 - Keep correctness tests small and deterministic.
-- Use the fallback ladder as an engineering control.
-- Prefer a reliable impressive subset over a fragile maximal system.
-
+- Treat transfer overhead as part of the result, not an inconvenience.
+- Prefer a reliable scoped demo over unstable stretch features.

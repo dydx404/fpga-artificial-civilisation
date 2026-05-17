@@ -1,56 +1,42 @@
 # Demo Storyboard
 
-The final demo should tell a clear story: simple local incentives can produce dramatic long-horizon behaviour, and FPGA acceleration lets the team explore many more strategic interactions than a simple CPU loop.
+The demo should show simple local rules producing visible spatial dynamics, then show where the FPGA accelerates the update loop.
 
-## Scene 1: Open the Strategy Colosseum
+## Scene 1: Initial Grid
 
-Start with a tournament dashboard. Show a list of strategies entering the arena: Always Cooperate, Always Defect, Tit-for-Tat, Suspicious Tit-for-Tat, Generous Tit-for-Tat, Random(p), Pavlov, and Grudger.
+Show a grid with a random mix of strategies. Explain that each cell is a simple finite-state agent.
 
-## Scene 2: Long Repeated Games
+## Scene 2: Local Repeated Game
 
-Run repeated Prisoner's Dilemma matches. Show that one-round incentives do not tell the whole story: long memory, retaliation, forgiveness, and noise change which strategies survive.
+Show or explain the local update: each cell plays Prisoner's Dilemma with neighbours, accumulates payoff, and compares local performance.
 
-## Scene 3: Leaderboard and Payoff Matrix
+## Scene 3: Spatial Evolution
 
-Display a leaderboard and strategy-vs-strategy payoff matrix. Highlight exploiters, robust cooperators, and strategies that perform well only against weak opponents.
+Run the simulation. Show cooperation clusters, defector spread, boundary movement, or oscillations.
 
-## Scene 4: FPGA Acceleration
+## Scene 4: Metrics
 
-Run the same tournament on CPU and FPGA. Show rounds per second, matches per second, and whether transfer overhead is included. If multiple match cores exist, show parallel scaling.
+Display:
 
-## Scene 5: Evolutionary Tournament
+- cooperation ratio,
+- strategy distribution,
+- mean payoff,
+- payoff heatmap,
+- generation number.
 
-Enable selection and mutation. Weak strategy variants disappear, strong variants reproduce, and probabilistic parameters drift. Show population distribution changing over generations.
+## Scene 5: FPGA Acceleration
 
-## Scene 6: Spatial Civilisation Extension
+Run the same deterministic rule on CPU and FPGA. Show cells updated per second, game rounds per second, and full-loop timing including transfer overhead.
 
-Move winning or interesting strategies into a 2D civilisation map. Agents interact with neighbours. Cooperation clusters, betrayal waves, collapse, and recovery become visible.
+## Scene 6: Controlled Extension
 
-## Scene 7: Multi-Board Extension
-
-If multiple PYNQ boards are available, show each board as an arena shard, civilisation region, or strategy league participant. The host aggregates a global leaderboard or distributed map.
-
-## Live Statistics
-
-Display a compact dashboard:
-
-- Cooperation ratio.
-- Mean payoff.
-- Strategy distribution.
-- Entropy.
-- Leaderboard rank.
-- Strategy-vs-strategy payoff.
-- Robustness or exploitability score.
-- Tournament generation number.
-
-The best demo ends with a live parameter change, such as increasing noise, mutation, temptation payoff, or round count, and watching the strategic ecosystem respond.
+If stable, enable mutation/noise or add another strategy. Show how the pattern changes.
 
 ## Backup Demo
 
-If the full FPGA path is not ready, show:
+If full FPGA grid integration is incomplete:
 
-- Python tournament simulator with strong leaderboard and payoff-matrix visualisation.
-- Single FPGA repeated Prisoner's Dilemma match core if available.
-- Spatial civilisation as a Python or visual extension.
-- A clear roadmap from arena MVP to distributed civilisation.
-
+- Show Python visualisation.
+- Show RTL payoff/update core tests.
+- Show a single hardware update or simulated hardware-compatible pipeline.
+- Explain the achieved fallback tier.

@@ -4,7 +4,7 @@ const root = document.querySelector<HTMLDivElement>("#app") ?? document.body.app
 root.innerHTML = `
   <main class="shell">
     <section class="toolbar">
-      <h1>FPGA Artificial Civilisation Engine</h1>
+      <h1>FPGA Spatial Game Dynamics Simulator</h1>
       <div id="stats">generation 0</div>
     </section>
     <canvas id="world"></canvas>
@@ -42,4 +42,3 @@ function tick(): void {
 }
 
 tick();
-

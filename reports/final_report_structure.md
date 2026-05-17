@@ -2,49 +2,40 @@
 
 ## Abstract
 
-Summarise the simulator, FPGA acceleration goal, final implementation level, and key results.
+Summarise the spatial game dynamics simulator, achieved fallback tier, and key benchmark result.
 
 ## Introduction
 
-Motivation, project goals, and contribution summary.
+Problem framing, FPGA motivation, project constraints, and team goals.
 
 ## Background
 
-Evolutionary game theory, cellular automata, multi-agent systems, and FPGA acceleration.
+Repeated Prisoner's Dilemma, evolutionary game dynamics, cellular automata, and FPGA acceleration.
 
 ## Model
 
-Agent fields, strategies, payoff matrices, update rules, mutation, resources if implemented.
+Grid layout, agent state, strategies, payoff matrix, update rule, mutation/noise.
 
 ## Architecture
 
-Host/PS/PL split, data flow, double buffering, DMA, visualisation.
+Python reference model, PYNQ/control layer, FPGA update engine, visualisation, benchmark flow.
 
 ## Implementation
 
-Python model, RTL modules, PYNQ interface, frontend, benchmark tooling.
+Python, RTL, PYNQ integration, visualisation, tests.
 
 ## Verification
 
-Unit tests, small-world correctness comparisons, deterministic seeds, RTL simulations.
+Unit tests, deterministic small-grid comparison, fixed seeds, mutation-disabled checks.
 
 ## Results
 
-Simulation behaviour, benchmark tables, plots, CPU versus FPGA comparison.
+Visual dynamics, CPU baseline, FPGA timing, transfer overhead, resource utilisation.
 
 ## Discussion
 
-What worked, what did not, bottlenecks, modelling limitations, hardware limitations.
-
-## Risk and Fallback Reflection
-
-Explain final achieved tier and why decisions were made.
+What worked, limitations, bottlenecks, and why scope decisions were made.
 
 ## Conclusion
 
-Summarise scientific and engineering value.
-
-## Future Work
-
-Trust, memory, public goods, resources, multi-FPGA, richer visualisation.
-
+Summarise technical contribution and realistic future work.

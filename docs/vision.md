@@ -1,71 +1,36 @@
 # Vision
 
-The FPGA Artificial Civilisation Engine is evolving into a broader hardware-accelerated game-theory laboratory. The project now has two connected modes:
+The project vision is a grounded FPGA-accelerated simulator for spatial game dynamics. It should be understandable as an engineering system: compact state, local interactions, synchronous updates, hardware acceleration, and live visualisation.
 
-- Strategy Arena / Strategy Colosseum: repeated-game tournaments between long-horizon strategies.
-- Artificial Civilisation / Spatial Evolution: strategies live inside a 2D world where local interaction creates emergent social behaviour.
+## Core Statement
 
-Together, these modes support a first-place-level narrative: build a distributed FPGA-accelerated laboratory for testing long-horizon strategic behaviour, emergent cooperation, betrayal, adaptation, and social evolution.
+Build a multi-agent strategy grid where simple agents repeatedly interact with neighbours. Use Python to define the model, FPGA logic to accelerate the local update loop, and host visualisation to show evolving spatial patterns.
 
-The project is ambitious because it combines three hard things:
+## Design Principles
 
-- A mathematically meaningful simulation model.
-- A real FPGA acceleration path.
-- A compelling visual and narrative demo.
+- Simple local rules.
+- Emergent global patterns.
+- Clear FPGA datapath.
+- Deterministic correctness tests.
+- Modular Python/RTL/PYNQ/frontend split.
+- Scope suitable for a 35-day group project.
 
-The core idea is that strategies can be studied at two scales. In the Strategy Arena, strategies compete directly in repeated games and produce measurable rankings, payoff matrices, exploitability scores, and robustness curves. In the Artificial Civilisation mode, those strategies become agents in a spatial world, where local interactions produce cooperation clusters, betrayal waves, collapse, recovery, inequality, alliances, and stable local norms.
+## Research / Engineering Questions
 
-## Research Questions
-
-Useful project questions include:
-
-- Which long-game strategies survive repeated interaction?
-- Which strategies exploit naive opponents, and which remain robust under noise?
-- How do mutation and selection change a strategy population over time?
-- When does cooperation survive in a hostile environment?
-- How does mutation prevent or accelerate collapse?
-- Do local neighbourhoods produce stable clusters?
-- How does resource scarcity change strategy evolution?
-- Which repeated-game kernels are cheap enough for FPGA acceleration?
-- What is the speedup compared with a CPU reference model?
-
-## Engineering Vision
-
-The system should scale from a pure Python reference model to a Zynq FPGA prototype:
-
-- Python defines the mathematical truth for tournaments and spatial worlds.
-- RTL implements fixed, fast subsets of the repeated match and spatial update rules.
-- PYNQ controls strategy/game configuration, buffers, DMA, and result transfer.
-- The frontend turns match results, leaderboards, and world state into live dashboards.
-- Benchmarks prove what is accelerated and what remains software orchestration.
-
-## Two-Mode Roadmap
-
-Strategy Arena is the clearer MVP because it is measurable:
-
-- Repeated Prisoner's Dilemma tournament.
-- Fixed strategy set.
-- Score accumulation and leaderboard.
-- CPU versus FPGA match throughput.
-- Parallel match cores as the natural scaling story.
-
-Artificial Civilisation is the more visually impressive extension:
-
-- Strategies become agents on a grid.
-- Agents interact with neighbours.
-- Cooperation clusters, collapse, recovery, and resource pressure emerge.
-- The arena can evolve strategies before placing them into spatial worlds.
-
-## Distributed Vision
-
-If multiple PYNQ-Z1 boards are available, each board can become one arena shard, civilisation region, or strategy league participant. The host controller distributes configurations, boards run accelerated simulations locally, and the host aggregates leaderboards, payoff matrices, and global visualisations.
+- How do local repeated games change global strategy distribution?
+- When do cooperation clusters survive?
+- How do mutation and noise affect stability?
+- How much faster is a hardware update engine than a CPU reference?
+- Which parts of the update rule map cleanly to FPGA logic?
 
 ## Success Criteria
 
-A strong final project should show:
+- The MVP rule is clearly documented and implemented in Python.
+- Hardware performs a real update computation, not just data movement.
+- Python and hardware agree on deterministic small grids.
+- Visualisation shows evolving strategy and payoff patterns.
+- Benchmarks report cells/second, frames/second, and FPGA resource use.
 
-- A working tournament or spatial simulation with visible strategic behaviour.
-- Clear comparison between CPU and FPGA match/update throughput.
-- A defensible mapping from repeated-game rules to hardware.
-- Honest discussion of limitations and fallback choices.
-- A polished dashboard/demo that a non-specialist can understand.
+## Long-Term Direction
+
+If the MVP succeeds, the same architecture can support graph topologies, more strategy rules, resource fields, asynchronous updates, or multi-board partitioning. These remain extensions, not the core proposal.

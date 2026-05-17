@@ -2,33 +2,52 @@
 
 ## Title
 
-FPGA Artificial Civilisation Engine: Hardware-Accelerated Simulation of Emergent Cooperation
+FPGA-Accelerated Spatial Game Dynamics Simulator
 
 ## Motivation
 
-Explain why evolutionary game theory and cellular automata are useful for studying cooperation, collapse, and collective behaviour. Motivate FPGA acceleration through massive local parallelism.
+Local strategic interaction can produce visible spatial patterns. The update rule is regular and parallel, making it a credible FPGA acceleration workload.
 
 ## Objectives
 
 - Build a Python reference simulator.
-- Design an FPGA update pipeline for local agent interactions.
-- Visualise strategy evolution and statistics.
-- Benchmark CPU and FPGA throughput.
-- Demonstrate at least one emergent behaviour story.
+- Design an FPGA-friendly spatial update pipeline.
+- Visualise evolving strategy and payoff patterns.
+- Benchmark CPU versus FPGA throughput.
+- Keep the scope realistic for a 35-day group project.
 
 ## Method
 
-Describe the 2D grid, agent state, Prisoner's Dilemma payoff, mutation, strategy copying, and double buffering.
+Describe:
+
+- 2D grid of agents.
+- Repeated Prisoner's Dilemma.
+- Simple finite-state strategies.
+- Payoff accumulation.
+- Imitation of strongest neighbour.
+- Optional mutation/noise.
+- Double-buffered synchronous updates.
 
 ## Hardware Plan
 
-Describe neighbour fetch, payoff computation, mutation LFSR, writeback, and statistics reduction.
+Describe:
+
+- Neighbourhood fetch.
+- Strategy decision unit.
+- Payoff lookup.
+- Accumulation and best-neighbour selection.
+- LFSR mutation.
+- Statistics reduction.
+- PYNQ/host interface.
 
 ## Evaluation
 
-Correctness against Python on small worlds. Throughput comparison on larger worlds. Qualitative demo of emergent behaviour.
+- Correctness against Python on small deterministic grids.
+- CPU versus FPGA cells updated per second.
+- Transfer overhead versus kernel time.
+- FPGA resource use.
+- Visual examples of spatial dynamics.
 
 ## Risks
 
-Neighbour fetch, DMA, scope creep, visualisation time, and correctness mismatch.
-
+Neighbour fetch, DMA integration, scope creep, strategy semantics mismatch, and visualisation time.

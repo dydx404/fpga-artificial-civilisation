@@ -1,83 +1,75 @@
 # 5-Week Sprint Plan
 
-## Week 1: Python Model + Architecture + Simple RTL Skeleton
+## Week 1: Model, Scope, and Data Format
 
 Goals:
 
-- Implement Python Prisoner's Dilemma grid simulation.
-- Write architecture, interface, and fallback documents.
-- Create initial RTL module skeletons.
-- Agree on agent encoding and strategy IDs.
-- Run first unit tests.
+- Finalise MVP rule and strategy encoding.
+- Confirm Python reference model runs and is documented.
+- Define packed agent word and frame layout.
+- Write tiny-grid correctness cases.
 
 Exit criteria:
 
-- Python example produces plots.
-- Team can explain the update rule.
-- RTL owners have concrete module tasks.
+- Python tests pass.
+- Architecture and MVP docs match the intended build.
+- RTL owners know the update-core interface.
 
-## Week 2: Basic FPGA Update Core + Visualiser
+## Week 2: RTL Units and Visualisation
 
 Goals:
 
-- Implement payoff unit and LFSR testbenches.
-- Build or stub neighbour fetch path.
-- Improve matplotlib visualiser.
-- Define frame packing and PYNQ buffer format.
-- Add CPU baseline benchmark.
+- Implement or refine payoff unit, LFSR, and strategy decision skeletons.
+- Build RTL unit testbenches.
+- Improve Python/matplotlib visualisation.
+- Run CPU baseline.
 
 Exit criteria:
 
-- Payoff and LFSR simulations pass.
-- Visualiser shows live or saved frames.
+- Payoff/LFSR tests pass where tools are available.
+- Visualiser shows repeatable spatial evolution.
 - CPU baseline reports cells per second.
 
-## Week 3: DMA / Integration + Mutation + Metrics
+## Week 3: PYNQ / Hardware Path
 
 Goals:
 
-- Bring up PYNQ overlay loading path.
-- Test DMA loopback or frame transfer.
-- Integrate mutation threshold.
-- Add cooperation ratio, mean payoff, entropy, and strategy counts.
-- Compare small hardware outputs against Python where possible.
+- Bring up overlay/control workflow or simulated hardware path.
+- Transfer packed frames.
+- Run one hardware update core or one generation path.
+- Compare deterministic output against Python.
 
 Exit criteria:
 
-- Deterministic small-world correctness path exists.
-- At least one integrated PS/PL or simulated-PL demo works.
-- Benchmark format is stable.
+- At least Tier 1 fallback is achieved.
+- Timing can separate transfer and compute.
 
-## Week 4: Resources / Trust / Dynamic Features + Benchmarking
+## Week 4: Integration and Benchmarking
 
 Goals:
 
-- Add one civilisation feature only if base path is stable.
-- Run CPU and FPGA benchmark matrix.
-- Improve frontend and demo visuals.
-- Write interim results and final report evidence.
-- Decide final fallback tier.
+- Freeze model features.
+- Run benchmark matrix.
+- Add mutation or extra strategies only if the base path is stable.
+- Prepare report figures and demo script.
 
 Exit criteria:
 
 - Demo feature set is frozen.
-- Benchmark data is collected or the fallback benchmark is ready.
-- Report figures are identified.
+- Benchmark table is credible.
+- Fallback tier is known.
 
-## Week 5: Polish, Report, Demo, Fallback Freeze
+## Week 5: Polish and Report
 
 Goals:
 
 - Stop feature work.
-- Fix bugs and integration rough edges.
-- Prepare final presentation.
-- Record demo video or scripted fallback.
-- Complete final report and contribution summary.
+- Fix integration bugs.
+- Rehearse demo.
+- Complete final report and presentation.
 
 Exit criteria:
 
 - Reproducible demo.
-- Clean repository.
-- Honest benchmark table.
-- Every team member has documented contribution.
-
+- Honest benchmark data.
+- Clear contribution summary.

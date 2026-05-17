@@ -1,6 +1,6 @@
 # Python Reference Model
 
-This package is the mathematical reference implementation for the FPGA Artificial Civilisation Engine. It should stay readable, tested, and deterministic under fixed seeds.
+This package is the mathematical reference implementation for the FPGA-Accelerated Spatial Game Dynamics Simulator. It should stay readable, tested, and deterministic under fixed seeds.
 
 The current model implements:
 
@@ -36,4 +36,3 @@ The script writes PNG frames and a `metrics.csv` file.
 The Python model intentionally keeps richer fields than the first RTL target. The first FPGA version may only update packed strategy words. Python remains the reference for behaviour and experiment design.
 
 The default boundary rule is wrap-around. Disable it only after hardware and Python comparison tests are updated.
-

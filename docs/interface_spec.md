@@ -1,6 +1,6 @@
 # Interface Specification
 
-This document defines the initial contract between Python, PYNQ, RTL, benchmark scripts, and visualisers. It can change, but changes should be versioned and tested.
+This document defines the initial contract between Python, PYNQ, RTL, benchmark scripts, and visualisers.
 
 ## World Layout
 
@@ -10,50 +10,51 @@ The world is a 2D grid stored in row-major order:
 index = y * width + x
 ```
 
-The MVP uses wrap-around boundaries. Hardware and Python must agree on this before correctness comparisons.
+The MVP uses wrap-around boundaries unless a test explicitly disables wrapping.
 
-## Agent Fields
+## Agent State
 
 Python reference fields:
 
 - `strategy`: unsigned 8-bit integer.
-- `payoff`: 32-bit float in Python, fixed-point candidate in RTL.
-- `energy`: 32-bit float in Python, quantised candidate in RTL.
-- `age`: unsigned 16-bit integer in Python, quantised candidate in RTL.
+- `last_action`: cooperate/defect action from the previous round.
+- `payoff`: 32-bit float in Python, fixed-width integer candidate in RTL.
+- `age`: optional unsigned counter for experiments/debugging.
 
-MVP RTL packed agent word:
+MVP RTL packed agent word candidate:
 
 ```text
-bit  [1:0] strategy
-bit  [3:2] flags / reserved
-bit  [5:4] energy_class
-bit  [7:6] age_class
+bit  [2:0] strategy_id
+bit  [3]   last_action
+bit  [5:4] flags / reserved
+bit  [7:6] age_class / reserved
 ```
 
-The packed word is intentionally small for the first hardware version. Python keeps richer state and can quantise only the fields used by the FPGA.
+The first hardware version may use only `strategy_id` and preserve the other bits.
 
 ## Strategy Encoding
 
 ```text
-0 = cooperate
-1 = defect
-2 = tit_for_tat placeholder
-3 = random placeholder
+0 = Always Cooperate
+1 = Always Defect
+2 = Tit-for-Tat
+3 = Random(p)
+4 = Pavlov / Win-Stay-Lose-Shift
 ```
 
-The MVP RTL may initially support only `0` and `1`. Python supports all four so the higher-level model can grow.
+The first RTL milestone may support only strategies `0` and `1`, then add stateful strategies incrementally.
 
-## Payoff Matrix
+## Game Parameters
 
-For a 2x2 game:
+For a 2x2 payoff matrix:
 
 ```text
-                 opponent cooperates    opponent defects
-self cooperates          R                    S
-self defects             T                    P
+                 neighbour cooperates    neighbour defects
+agent cooperates          R                    S
+agent defects             T                    P
 ```
 
-Prisoner's Dilemma default:
+Default Prisoner's Dilemma:
 
 ```text
 R = 3
@@ -61,6 +62,15 @@ S = 0
 T = 5
 P = 1
 ```
+
+Other configuration:
+
+- `mutation_threshold`
+- `neighbourhood_type`
+- `grid_width`
+- `grid_height`
+- `step_count`
+- `initial_seed`
 
 ## Frame Transfer
 
@@ -70,26 +80,19 @@ Initial frame format:
 uint8 agent_words[height][width]
 ```
 
-Possible future frame format:
+Metrics payload:
 
 ```text
-header:
-  uint16 width
-  uint16 height
-  uint32 generation
-payload:
-  uint8 agent_words[height * width]
-metrics:
-  uint32 strategy_counts[4]
-  int64 payoff_sum_q
+uint32 strategy_counts[N_STRATEGIES]
+uint32 cooperation_count
+int64  payoff_sum_q
+uint32 generation
 ```
 
-## Control Registers
-
-Candidate AXI-lite registers:
+## Candidate Control Registers
 
 ```text
-0x00 control        bit 0 start, bit 1 reset, bit 2 swap_buffers
+0x00 control        bit 0 start, bit 1 reset
 0x04 status         bit 0 busy, bit 1 done, bit 2 error
 0x08 width
 0x0C height
@@ -99,13 +102,12 @@ Candidate AXI-lite registers:
 0x1C payoff_T
 0x20 payoff_P
 0x24 generation_count
+0x28 neighbourhood_type
 ```
 
 The exact map depends on the final IP wrapper.
 
-## Visualisation Protocol
-
-Early visualisers can read local files. Later network messages should use:
+## Visualisation Metadata
 
 ```json
 {
@@ -113,10 +115,11 @@ Early visualisers can read local files. Later network messages should use:
   "generation": 42,
   "width": 128,
   "height": 128,
-  "strategy_counts": {"cooperate": 7000, "defect": 9000},
-  "cooperation_ratio": 0.4375
+  "strategy_counts": {
+    "cooperate": 7000,
+    "defect": 9000
+  },
+  "cooperation_ratio": 0.4375,
+  "mean_payoff": 12.4
 }
 ```
-
-Binary frame transport can be added after JSON metadata is stable.
-

@@ -2,58 +2,50 @@
 
 Benchmarking should answer two questions:
 
-1. Does the FPGA compute the same update rule as the reference model?
-2. Does the FPGA improve throughput once transfer overhead is included?
+1. Does the FPGA compute the same update rule as the Python reference?
+2. Does the FPGA improve useful update throughput once transfer overhead is included?
 
-## Correctness Benchmarks
+## Correctness First
 
-Use small worlds first:
+Use deterministic small grids:
 
-- 4x4 deterministic cooperate/defect pattern.
-- 8x8 random pattern with fixed seed.
-- Mutation disabled.
+- `4x4` all cooperators.
+- `4x4` single defector.
+- `8x8` fixed random seed.
+- Mutation and action noise disabled.
 - Fixed payoff matrix.
-- Compare Python next state against RTL/PYNQ output.
 
-Only add mutation after deterministic correctness is proven.
+Compare:
 
-## CPU Baseline
+- next strategy grid,
+- payoff totals,
+- strategy counts,
+- cooperation count.
 
-Measure:
+## Performance Metrics
 
-- World size.
-- Number of generations.
-- Total runtime.
-- Cells updated per second.
-- Frames per second.
-- Final cooperation ratio.
-
-The script `benchmarks/cpu_baseline.py` provides the starter baseline.
-
-## FPGA Measurements
-
-Measure separately:
-
-- Host-to-device transfer time.
-- FPGA kernel time.
-- Device-to-host transfer time.
-- Full loop time.
-- Setup overhead.
-
-This separation prevents the team from overclaiming a compute speedup that disappears when DMA is included.
+| Metric | Meaning |
+| --- | --- |
+| cells updated per second | Main spatial update throughput |
+| game rounds per second | Useful if repeated rounds are explicitly modelled |
+| frames per second | Full generations per second |
+| kernel time | FPGA compute time only |
+| transfer time | Host/PYNQ input/output movement |
+| full-loop time | End-to-end runtime including transfer |
+| resource use | LUTs, FFs, BRAM, DSPs, clock frequency |
 
 ## Experiment Matrix
 
-Suggested sizes:
+Suggested grid sizes:
 
 ```text
+32x32
 64x64
 128x128
 256x256
-512x512
 ```
 
-Suggested generation counts:
+Suggested step counts:
 
 ```text
 100
@@ -67,17 +59,12 @@ Suggested mutation probabilities:
 0
 0.001
 0.01
-0.05
 ```
 
-## Reporting
+## Reporting Rules
 
-Report:
-
-- Mean of at least 3 runs.
-- Standard deviation if time permits.
-- Exact commit hash.
-- Hardware clock frequency.
-- Board and bitstream version.
-- Whether visualisation was enabled.
-
+- State whether visualisation was enabled.
+- Report mean of at least 3 runs where possible.
+- Include commit hash and board/bitstream version.
+- Separate CPU reference, FPGA kernel-only, and full-loop results.
+- Do not claim speedup from a different rule or different grid size.

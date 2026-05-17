@@ -1,86 +1,27 @@
 # Team Roles
 
-The project is designed for a 6-person team. Each person owns a subsystem, but the project only succeeds if integration happens early and often.
+The project is sized for six people. Each role owns a clear subsystem, but weekly integration is more important than isolated progress.
 
-## 1. FPGA Compute Core
+| Role | Main Responsibility | Key Deliverables |
+| --- | --- | --- |
+| 1. FPGA update engine | Spatial update datapath | Payoff unit, strategy decision unit, mutation hook, RTL tests |
+| 2. Memory/interface/PYNQ integration | Hardware/software movement | Buffer format, DMA/control path, packed frame transfer |
+| 3. Python model and theory | Reference semantics | Numpy model, payoff rules, deterministic tests, experiment configs |
+| 4. Visualisation/dashboard | Demo interface | Grid viewer, payoff heatmap, cooperation/strategy plots |
+| 5. Testing/benchmarking | Evidence and validation | CPU baseline, FPGA timings, correctness matrix, resource table |
+| 6. Integration/project/report | Coherence and delivery | Sprint tracking, fallback decisions, report/presentation narrative |
 
-Owns:
+## Integration Expectations
 
-- Payoff unit.
-- Agent update core.
-- Strategy update logic.
-- Mutation LFSR integration.
-- RTL testbenches for core logic.
+- Week 1: Python model, architecture, and data format agreed.
+- Week 2: RTL unit tests and visualisation connected to Python output.
+- Week 3: PYNQ or simulated hardware path exercised.
+- Week 4: benchmark and demo candidate frozen.
+- Week 5: polish, report, final demo, and fallback cleanup.
 
-Main risk: pipeline complexity and matching Python semantics.
+## Shared Rules
 
-## 2. Memory / DMA / Interfaces
-
-Owns:
-
-- World buffer design.
-- Frame packing format.
-- AXI-stream or AXI-lite interface plan.
-- PYNQ DMA experiments.
-- Hardware/software data transfer tests.
-
-Main risk: transfer overhead dominating compute speed.
-
-## 3. Python Reference Model and Theory
-
-Owns:
-
-- Numpy simulation.
-- Payoff matrices.
-- Update rules.
-- Scientific assumptions.
-- Experiment scripts and correctness reference.
-
-Main risk: model becoming too complex for the hardware team to follow.
-
-## 4. Frontend Visualisation
-
-Owns:
-
-- Matplotlib viewer first.
-- Web or Unity viewer later.
-- Heatmaps and live statistics.
-- Demo presentation visuals.
-- Frontend protocol with integration owner.
-
-Main risk: building a pretty interface before the data path is stable.
-
-## 5. Benchmarking and Testing
-
-Owns:
-
-- CPU baseline.
-- Correctness tests.
-- FPGA benchmark methodology.
-- Metrics schema.
-- Regression checks and reproducibility.
-
-Main risk: measuring the wrong thing or comparing different rules.
-
-## 6. Integration / Project Management / Report
-
-Owns:
-
-- Sprint board.
-- Weekly integration checklist.
-- Fallback decision points.
-- Report structure.
-- Demo script and final narrative.
-
-Main risk: subsystems working separately but not together.
-
-## Weekly Integration Rule
-
-Every week should end with one integrated artifact:
-
-- Week 1: Python model and architecture review.
-- Week 2: visualiser connected to model, RTL modules reviewed.
-- Week 3: PYNQ or simulated hardware interface exercised.
-- Week 4: benchmark and demo candidate.
-- Week 5: frozen demo and final report evidence.
-
+- Keep strategy encoding consistent across Python and RTL.
+- Disable randomness for correctness tests.
+- Do not add stretch features that change the MVP data format late.
+- Prefer one reliable integrated path over several impressive disconnected parts.

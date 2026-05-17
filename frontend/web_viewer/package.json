@@ -1,5 +1,5 @@
 {
-  "name": "fpga-civilisation-web-viewer",
+  "name": "fpga-spatial-game-dynamics-web-viewer",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -13,4 +13,3 @@
     "vite": "^5.4.0"
   }
 }
-

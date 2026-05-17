@@ -11,9 +11,9 @@ The Python model uses convenient numeric types. The FPGA design needs compact fi
 
 Python should prioritise clarity and correctness. It is the reference, not the hardware implementation language.
 
-## RTL MVP Agent Word
+## RTL Agent Word
 
-The first RTL target is an 8-bit packed word:
+The existing scaffold starts with a 2-bit strategy field:
 
 ```text
 bit  [1:0] strategy
@@ -22,7 +22,16 @@ bit  [5:4] energy_class
 bit  [7:6] age_class
 ```
 
-This supports a simple strategy-only hardware core while leaving room for coarse energy and age classes.
+The project MVP wants five strategies, so the proposed target format is:
+
+```text
+bit  [2:0] strategy_id
+bit  [3]   last_action
+bit  [5:4] flags / reserved
+bit  [7:6] age_class / reserved
+```
+
+This still fits in one byte while leaving a bit for simple strategy memory.
 
 ## Payoff Width
 
@@ -60,4 +69,3 @@ Quantisation can change behaviour:
 - Python and RTL may diverge if random strategy actions are not specified carefully.
 
 The first FPGA version should minimise these risks by focusing on integer Prisoner's Dilemma with cooperate/defect strategies.
-

@@ -1,4 +1,4 @@
-"""PYNQ overlay wrapper for the civilisation engine."""
+"""PYNQ overlay wrapper for the spatial game dynamics engine."""
 
 from __future__ import annotations
 
@@ -52,4 +52,3 @@ class CivOverlay:
         packed = pack_strategy_frame(strategies)
         result = self.dma_interface.transfer_frame(packed)
         return unpack_strategy_frame(result, self.config.height, self.config.width)
-
