@@ -314,6 +314,7 @@ That is enough for a strong project.
 Only after the MVP works:
 
 - mutation or action noise,
+- safe user-defined strategies through a small rule format,
 - graph topologies instead of grids,
 - different games,
 - reputation values,

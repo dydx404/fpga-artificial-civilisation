@@ -36,3 +36,5 @@ Build a multi-agent strategy grid where simple agents repeatedly interact with n
 ## Long-Term Direction
 
 If the MVP succeeds, the same architecture can support graph topologies, more strategy rules, resource fields, asynchronous updates, or multi-board partitioning. These remain extensions, not the core proposal.
+
+One especially useful extension is an Exploratory Game Theory Platform where users define safe finite-state strategies that compile into FPGA-executable lookup tables. See [exploratory_platform.md](exploratory_platform.md) for the roadmap.

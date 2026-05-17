@@ -177,6 +177,7 @@ The project should freeze at the highest reliable tier rather than chase unstabl
 
 Only after the MVP is working:
 
+- User-programmable strategy arena using a safe DSL/JSON rule format.
 - Graph topologies instead of regular grids.
 - Probabilistic transitions.
 - Resource or energy fields.
@@ -185,10 +186,24 @@ Only after the MVP is working:
 - Multi-board distributed simulation.
 - Expanded benchmark matrix.
 
+### Exploratory Platform Direction
+
+One proposed extension is to turn the simulator into an **Exploratory Game Theory Platform**: users define bounded finite-state strategies, the CPU validates and compiles them into lookup tables, and the FPGA executes those compact strategy LUTs during arena or spatial runs.
+
+Start here:
+
+- [docs/exploratory_platform.md](docs/exploratory_platform.md): high-level extension vision.
+- [docs/strategy_dsl.md](docs/strategy_dsl.md): safe strategy DSL/compiler concept.
+- [docs/spatial_evolution_rules.md](docs/spatial_evolution_rules.md): invasion and local reproduction rules.
+- [docs/video_output.md](docs/video_output.md): live frame and video export plan.
+- [project_management/work_split.md](project_management/work_split.md): six-person work split for this direction.
+
+This is a roadmap, not completed implementation.
+
 ## Repository Layout
 
 ```text
-docs/                 Proposal, teammate guide, architecture, theory, and planning docs.
+docs/                 Proposal, teammate guide, architecture, theory, and extension docs.
 models/python/         Numpy reference simulator, examples, and tests.
 rtl/                   SystemVerilog scaffold for FPGA update components.
 pynq/                  PYNQ overlay/control placeholders.

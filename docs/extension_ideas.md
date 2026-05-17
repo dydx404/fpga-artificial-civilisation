@@ -13,11 +13,21 @@ Extensions are optional. Add them only after the MVP is stable and benchmarkable
 
 ## Strategy Extensions
 
+- User-programmable finite-state strategies via DSL or JSON/YAML rules.
 - Suspicious Tit-for-Tat.
 - Generous Tit-for-Tat.
 - Grudger.
 - Epsilon-greedy adaptive strategy.
 - Parameter sweeps for Random(p) and mutation probability.
+
+## Exploratory Platform Extensions
+
+- Safe parser/validator for user strategies.
+- Strategy compiler from FSM rules to packed LUTs.
+- Arena mode for user-submitted strategy tournaments.
+- Spatial invasion experiments with user strategies.
+- Frame/video export for strategy dynamics.
+- Benchmark suites against fixed reference strategies.
 
 ## Hardware Extensions
 
@@ -34,6 +44,7 @@ Extensions are optional. Add them only after the MVP is stable and benchmarkable
 - Payoff and cooperation timelines.
 - Cluster-size analysis.
 - Replay files for presentation.
+- Export `frame_0000.png` sequences and `evolution.mp4`.
 
 ## Distributed Extensions
 
