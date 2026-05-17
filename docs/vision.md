@@ -2,6 +2,8 @@
 
 The project vision is a grounded FPGA-accelerated simulator for spatial game dynamics. It should be understandable as an engineering system: compact state, local interactions, synchronous updates, hardware acceleration, and live visualisation.
 
+For a teammate-friendly introduction, start with [teammate_guide.md](teammate_guide.md).
+
 ## Core Statement
 
 Build a multi-agent strategy grid where simple agents repeatedly interact with neighbours. Use Python to define the model, FPGA logic to accelerate the local update loop, and host visualisation to show evolving spatial patterns.

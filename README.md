@@ -2,6 +2,12 @@
 
 A scoped FPGA/EEE group project for simulating simple local strategic interactions on a 2D grid. Many agents repeatedly play games such as Prisoner's Dilemma with nearby agents, update their strategies from local payoff, and produce visible spatial patterns of cooperation and competition.
 
+## Start Here
+
+New to the project? Read [docs/teammate_guide.md](docs/teammate_guide.md) first.
+
+It explains the project from first principles: what the grid is, why simple rules create interesting patterns, why this fits FPGA hardware, what the MVP looks like, and how each teammate can contribute.
+
 ## What the Project Is
 
 This project is a hardware-accelerated spatial evolutionary game simulator. It combines:
@@ -11,13 +17,13 @@ This project is a hardware-accelerated spatial evolutionary game simulator. It c
 - A PYNQ/host control layer for configuration, logging, and benchmarks.
 - A visualisation layer for evolving grids, cooperation ratio, strategy counts, and payoff maps.
 
-The intended result is a credible 35-day group project: simple local rules, clear FPGA acceleration, measurable speedup, and visually demonstrable emergent behaviour.
+The intended result is a credible 35-day group project: simple local rules, clear FPGA acceleration, measurable speedup, and a visual demo that is easy to understand.
 
 ## What the Project Is Not
 
-This is not a realistic society simulator, an economics model, an AGI system, or an open-ended artificial society. Any broad "society" language should be treated only as a loose demo metaphor for spatial patterns, not the technical claim.
+This is not a realistic social model, a market model, a human-intelligence project, or a simulation of people. Any broad "society" language should be treated only as a loose demo metaphor for spatial patterns, not the technical claim.
 
-The technical focus is narrower:
+The technical focus is practical and narrow:
 
 - Local interaction.
 - Repeated games.
@@ -27,7 +33,7 @@ The technical focus is narrower:
 
 ## Why This Fits FPGA
 
-The core update step is regular, local, and highly parallel:
+The core update step is regular, local, and highly parallel. That is exactly the kind of repetitive work hardware can be good at:
 
 - Each cell interacts only with nearby neighbours.
 - Payoff lookup is small and deterministic.
@@ -38,7 +44,7 @@ The core update step is regular, local, and highly parallel:
 
 The FPGA should accelerate computation, not just act as a communication bridge. The main comparison is CPU reference update speed versus FPGA update speed for the same rules.
 
-## MVP
+## MVP: Keep It Small and Real
 
 The minimum viable project is:
 
@@ -83,7 +89,7 @@ Main modules:
 - Host/PYNQ control layer.
 - Visualisation frontend.
 
-## Mathematical Model
+## Mathematical Model, in Plain Terms
 
 Agents occupy cells on a grid. At each generation:
 
@@ -182,7 +188,7 @@ Only after the MVP is working:
 ## Repository Layout
 
 ```text
-docs/                 Proposal, architecture, theory, risk, and planning docs.
+docs/                 Proposal, teammate guide, architecture, theory, and planning docs.
 models/python/         Numpy reference simulator, examples, and tests.
 rtl/                   SystemVerilog scaffold for FPGA update components.
 pynq/                  PYNQ overlay/control placeholders.
@@ -195,4 +201,11 @@ project_management/    Sprint plan, issue backlog, integration checklists.
 
 ## Current Status
 
-The repository currently contains a runnable Python grid simulator, unit tests, visualisation helpers, RTL skeleton modules, PYNQ placeholders, benchmark scripts, and project documentation. The current code supports the core grid/payoff/update path and a starter strategy set; the next implementation priorities are adding the remaining MVP strategy semantics, aligning packed state with RTL, and validating a small deterministic grid against the Python reference model.
+The repository currently contains a runnable Python grid simulator, unit tests, visualisation helpers, RTL skeleton modules, PYNQ placeholders, benchmark scripts, and project documentation.
+
+The current code supports the core grid/payoff/update path and a starter strategy set. The next implementation priorities are:
+
+- add the remaining MVP strategy semantics,
+- align packed state with RTL,
+- validate a small deterministic grid against the Python reference model,
+- keep the demo path simple and reliable.
